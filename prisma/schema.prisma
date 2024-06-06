@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model WAChat {W
+  id                      String                   @id
+  openRouterConversations OpenRouterConversation[]
+}
+
+model OpenRouterConversation {
+  waChatId String @id
+  memory   String
+  waChat   WAChat @relation(fields: [waChatId], references: [id])
+}
+
+
+model Cache {
+  key   String @id
+  value String
+}

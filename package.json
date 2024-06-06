@@ -5,7 +5,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/index.ts",
-    "start": "tsx src/index.ts"
+    "start": "tsx src/index.ts",
+    "generate": "prisma generate",
+    "migrate": "prisma migrate reset",
+    "build": "npm run generate && npm run migrate"
   },
   "keywords": [],
   "author": "",
@@ -20,16 +23,19 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
+    "@keyv/sqlite": "^3.6.7",
     "@langchain/community": "^0.2.6",
     "@langchain/core": "^0.2.6",
     "@langchain/langgraph": "^0.0.21",
     "@langchain/openai": "^0.1.1",
+    "@prisma/client": "5.15.0",
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
     "dotenv-expand": "^11.0.6",
     "express": "^4.19.2",
     "googleapis": "^139.0.0",
     "langchain": "^0.2.5",
+    "prisma": "^5.15.0",
     "z": "^1.0.9"
   }
 }

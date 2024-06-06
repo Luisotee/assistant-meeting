@@ -7,13 +7,26 @@ import {
   sendText,
 } from "./utils/whatsapp-message-helper";
 import { agentExecutor } from "./clients/langchain";
+import {
+  createChat,
+  createOpenRouterConversation,
+  getChatFor,
+  getOpenRouterConversationFor,
+  updateOpenRouterConversation,
+} from "./crud";
 
 const app = express();
 app.use(express.json());
 
 app.post("/webhook", async (req, res) => {
+  const id = req.body.entry?.[0]?.id;
+  console.log("Received entry id:", id);
   const message: Message =
     req.body.entry?.[0]?.changes[0]?.value?.messages?.[0];
+  const waChat = await getChatFor(id);
+  const conversation = await getOpenRouterConversationFor(id);
+
+  if (!waChat) await createChat(id); // Creates the chat if it doesn't exist yet
 
   if (message?.type === "text") {
     try {
@@ -24,7 +37,28 @@ app.post("/webhook", async (req, res) => {
         input: message.text.body,
       });
 
-      console.log("Response:", response.output);
+      //const response = { output: "Hello, I am a bot!" };
+
+      let chatHistoryRaw = await agentExecutor.memory?.loadMemoryVariables({});
+      let chatHistory: any[] = chatHistoryRaw?.chat_history;
+
+      let chatHistoryArray = chatHistory.map((message) => {
+        return {
+          [message.constructor.name]: message.content,
+        };
+      });
+
+      if (conversation) {
+        await updateOpenRouterConversation(
+          id,
+          JSON.stringify(chatHistoryArray)
+        ); // Updates the conversation
+      } else {
+        await createOpenRouterConversation(
+          id,
+          JSON.stringify(chatHistoryArray)
+        ); // Creates the conversation
+      }
 
       await sendText(message, response.output);
       await sendReaction(message, "✅");
