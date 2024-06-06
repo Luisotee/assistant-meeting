@@ -1,12 +1,12 @@
 import express from "express";
 import { PORT, WEBHOOK_VERIFY_TOKEN } from "./constants";
+import { Message } from "./interface";
 import {
   markAsRead,
   sendReaction,
   sendText,
 } from "./utils/whatsapp-message-helper";
-import { askModel } from "./clients/langchain";
-import { Message } from "./interface";
+import { agentExecutor } from "./clients/langchain";
 
 const app = express();
 app.use(express.json());
@@ -18,12 +18,16 @@ app.post("/webhook", async (req, res) => {
   if (message?.type === "text") {
     try {
       await markAsRead(message);
-      await sendReaction(message, "🔁");
+      await sendReaction(message, "⚙️");
 
-      const response = await askModel(message.text.body);
-      console.log("Response:", response);
+      const response = await agentExecutor.invoke({
+        input: message.text.body,
+      });
 
-      await sendText(message, response);
+      console.log("Response:", response.output);
+
+      await sendText(message, response.output);
+      await sendReaction(message, "✅");
     } catch (error) {
       await markAsRead(message);
       await sendReaction(message, "⚠️");
