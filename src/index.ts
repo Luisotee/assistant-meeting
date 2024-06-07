@@ -3,6 +3,10 @@ import { PORT, WEBHOOK_VERIFY_TOKEN } from "./constants";
 import { Message } from "./interface";
 import {
   markAsRead,
+  sendButton,
+  sendButton2,
+  sendButton3,
+  sendList,
   sendReaction,
   sendText,
 } from "./utils/whatsapp-message-helper";
@@ -20,24 +24,21 @@ app.use(express.json());
 
 app.post("/webhook", async (req, res) => {
   const id = req.body.entry?.[0]?.id;
-  console.log("Received entry id:", id);
   const message: Message =
     req.body.entry?.[0]?.changes[0]?.value?.messages?.[0];
-  const waChat = await getChatFor(id);
-  const conversation = await getOpenRouterConversationFor(id);
-
-  if (!waChat) await createChat(id); // Creates the chat if it doesn't exist yet
 
   if (message?.type === "text") {
     try {
+      const waChat = await getChatFor(id);
+      const conversation = await getOpenRouterConversationFor(id);
+
+      if (!waChat) await createChat(id); // Creates the chat if it doesn't exist yet
       await markAsRead(message);
       await sendReaction(message, "⚙️");
 
       const response = await agentExecutor.invoke({
         input: message.text.body,
       });
-
-      //const response = { output: "Hello, I am a bot!" };
 
       let chatHistoryRaw = await agentExecutor.memory?.loadMemoryVariables({});
       let chatHistory: any[] = chatHistoryRaw?.chat_history;
