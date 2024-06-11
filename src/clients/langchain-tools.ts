@@ -38,9 +38,11 @@ const googleCalendarViewTool = new GoogleCalendarViewTool(googleCalendarParams);
 
 const sendMessageOtherNumberTool = new DynamicStructuredTool({
   name: "send-message-other-number",
-  description: `This tool allows you to send a message to a phone number other than the one you are currently chatting with. 
-    If you want to send a message to the current chat, you don't need to use this tool.
-    You only need to use this tool if the user wants you to send a message to a different phone number.`,
+  description: `
+  - This tool allows you to send a message to a phone number other than the one you are currently chatting with. 
+  - If you want to send a message to the current chat, you don't need to use this tool.
+  - You only need to use this tool if Luis wants you to send a message to a different phone number.
+    `,
   schema: z.object({
     phoneNumber: z
       .string()

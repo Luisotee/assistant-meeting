@@ -36,8 +36,17 @@ app.post("/webhook", async (req, res) => {
       await markAsRead(message);
       await sendReaction(message, "⚙️");
 
+      let user;
+
+      if (message.from === "5515991306053") {
+        user = "Luis";
+      } else {
+        user = "Someone who is not Luis";
+      }
+
       const response = await agentExecutor.invoke({
         input: message.text.body,
+        props: `You are chatting with ${user} with phone number ${message.from}`,
       });
 
       let chatHistoryRaw = await agentExecutor.memory?.loadMemoryVariables({});
