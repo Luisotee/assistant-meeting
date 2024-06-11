@@ -60,8 +60,7 @@ app.post("/webhook", async (req, res) => {
           JSON.stringify(chatHistoryArray)
         ); // Creates the conversation
       }
-
-      await sendText(message, response.output);
+      await sendText(message.from, response.output);
       await sendReaction(message, "✅");
     } catch (error) {
       await markAsRead(message);

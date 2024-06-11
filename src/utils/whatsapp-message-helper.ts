@@ -2,22 +2,28 @@ import axios from "axios";
 import { GRAPH_API_TOKEN, NUMBER_ID } from "../constants";
 import { Message } from "../interface";
 
-export async function sendText(message: Message, text: string) {
-  await axios({
-    method: "POST",
-    url: `https://graph.facebook.com/v20.0/${NUMBER_ID}/messages`,
-    headers: {
-      Authorization: `Bearer ${GRAPH_API_TOKEN}`,
-    },
-    data: {
-      messaging_product: "whatsapp",
-      to: message.from,
-      type: "text",
-      text: {
-        body: text,
+export async function sendText(number: string, text: string) {
+  console.log("Sending message to phone number: ", number);
+  try {
+    const response = await axios({
+      method: "POST",
+      url: `https://graph.facebook.com/v20.0/${NUMBER_ID}/messages`,
+      headers: {
+        Authorization: `Bearer ${GRAPH_API_TOKEN}`,
       },
-    },
-  });
+      data: {
+        messaging_product: "whatsapp",
+        to: number,
+        type: "text",
+        text: {
+          body: text,
+        },
+      },
+    });
+    console.log("Request succeeded with response: ", response.data);
+  } catch (error) {
+    console.error("Request failed with error: ", (error as Error).message);
+  }
 }
 
 export async function sendReaction(message: Message, reaction: string) {

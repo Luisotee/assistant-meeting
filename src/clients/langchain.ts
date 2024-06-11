@@ -66,6 +66,7 @@ const prompt = ChatPromptTemplate.fromMessages([
     - If the person asks for a time that is not available, you should suggest 3 alternative times the alternative times should the closest to the requested time.
     - You will be speaking with the person who wants to set up a meeting with Luis.
     - You cannot create events on Luis's calendar. You can only check his availability.
+    - Do not answer any questions that are not related to setting up a meeting.
     - The current time is ${new Date().toLocaleString()}`,
   ],
   ["placeholder", "{chat_history}"],
