@@ -1,41 +1,43 @@
-# Anotações para Criação de um Bot de Agendamento de Reuniões
+### Notes for Creating a Meeting Scheduling Bot
 
-## Estrutura do Supervisor
+#### Supervisor Structure
 
-### Passos para Agendamento
+##### Steps for Scheduling
 
-1. O agente do anfitrião ajuda-o a escolher um horário para uma reunião com o convidado.
-2. O agente do anfitrião chama a ferramenta/função e envia uma mensagem ao convidado sugerindo um horário. Exemplo de mensagem:
+1. The host agent assists in choosing a time for a meeting with the guest.
+2. The host agent calls the tool/function and sends a message to the guest suggesting a time. Example message:
 
-![Exemplo de Botão de Convite](imgs/button-invite.png)
+   ![Example of Invite Button](imgs/button-invite.png)
 
-3. Caso o convidado escolha outro horário, ele pode sugerir um horário e o bot responderá com uma mensagem sugerindo 3 horários. Exemplo de mensagem:
+3. If the guest chooses another time, they can suggest a time, and the bot will respond with a message suggesting 3 times. Example message:
 
-![Exemplo de Botão de Convite](imgs/button-suggestion.png)
+   ![Example of Suggestion Button](imgs/button-suggestion.png)
 
-4. Confirma com o anfitrião e cria o evento no calendário. Exemplo de mensagem:
-   ![Exemplo de Botão de Confirmação](imgs/button-confirmation.png)
-5. Envia a mensagem de confirmação para o convidado.
+4. Confirms with the host and creates the event in the calendar. Example message:
 
-## Coisas a Considerar
+   ![Example of Confirmation Button](imgs/button-confirmation.png)
 
-1. **Problemas com Formato de Data**: A ferramenta de calendário tem problemas com o formato DD/MM/AAAA.
-2. **Proteção de Dados**: StructuredOutput não permitirá o vazamento de informações da agenda.
-3. **Integração com Google Meet**: Desenvolver uma ferramenta para a criação de reuniões no Google Meet (por último).
-4. **User Errors**: Responder uma mensagem de erro toda vez que o usuário mandar um prompt estranho.
+5. Sends the confirmation message to the guest.
 
-## Problema de Abuso/Spam no Chat
+#### Things to Consider
 
-- **Prevenção de Spam**: Criar um mecanismo para impedir que outras pessoas enviem mensagens que não sejam respostas ao bot.
+1. **Date Format Issues**: The calendar tool has issues with the DD/MM/YYYY format.
+2. **Data Protection**: StructuredOutput will not allow the leakage of schedule information.
+3. **Integration with Google Meet**: Develop a tool for creating meetings in Google Meet (lastly).
+4. **User Errors**: Respond with an error message every time the user sends a strange prompt.
 
-## Detalhes sobre os Agentes
+#### Chat Abuse/Spam Problem
 
-1. **Agente do Anfitrião**:
+- **Spam Prevention**: Create a mechanism to prevent others from sending messages that are not responses to the bot.
 
-   - Utiliza a ferramenta do calendário (completa) para ajudar o anfitrião a encontrar um horário livre.
-   - Envia uma mensagem ao convidado sugerindo um horário.
+#### Details about the Agents
 
-2. **Agente do Convidado**:
+1. **Host Agent**:
 
-   - Output estruturado para criar a mensagem com botões sugerindo horários disponíveis usando a ferramenta do calendário em modo "visualização".
-   - Outro agent ou o mesmo que aceite texto normal e tenha um output estruturado para confirmar.
+   - Uses the calendar tool (complete) to help the host find a free time.
+   - Sends a message to the guest suggesting a time.
+
+2. **Guest Agent**:
+
+   - Structured output to create the message with buttons suggesting available times using the calendar tool in "view" mode.
+   - Another agent or the same one that accepts normal text and has a structured output to confirm.
